@@ -20,7 +20,7 @@ Programming language of the future
 <div class="flex flex-row w-full">
   <ul class="w-1/2">
     <li v-click>Functional</li>
-    <li v-click>OOP (no classes 😉 )</li>
+    <li v-click>OOP (no classes, but actors 😉 )</li>
     <li v-click>Dynamic (strong)</li>
     <li v-click>Concurent</li>
     <li v-click>General purpose</li>
@@ -68,9 +68,9 @@ background: "./assets/gradient.svg"
       <li v-click> Scalability </li>
       <li v-click> Fault tolerance </li>
       <li v-click> Phoenix framework </li>
-      <li v-click> OTP </li>
-      <li v-click> Erlang VM </li>
+      <li v-click> OTP (Erlang VM, Mnesia, Actor Model, ETS)</li>
     </ul>
+    <img v-after src="assets/elixir_process.jpg" alt="Elixir process" class="w-90" v-motion :initial="{ x: -80 }" :enter="{ x: 0 }">
   </div>
 
   <div>
@@ -106,11 +106,9 @@ background: "./assets/elixir-2bg.png"
 
 # Data types in Elixir
 
----
-
 <div class="grid grid-cols-2 gap-10">
   <div>
-    <h2>Primary (value types)</h2>
+    <h3>Primary (value types)</h3>
     <ul v-click>
       <li> Integers (arbitrary-precision) </li>
       <li> Floats </li>
@@ -121,7 +119,7 @@ background: "./assets/elixir-2bg.png"
   </div>
 
   <div>
-    <h2> Collection types </h2>
+    <h3> Collection types </h3>
     <ul v-click>
       <li> Tuples {:ok, 42, "next"} </li>
       <li> Linked lists (closest to arrays) </li>
@@ -133,7 +131,7 @@ background: "./assets/elixir-2bg.png"
   </div>
 
   <div class="col-span-full flex flex-col items-center">
-    <h2>System types</h2>
+    <h3>System types</h3>
     <ul v-click>
       <li>PID - reference to process (remote or local)</li>
       <li> Ports - reference to a port</li>
@@ -158,7 +156,7 @@ layout: center
 - Create simple Elixir project
 
 ```bash
-$ mix phx.new chat_app
+$ mix phx.new chat_app --live # LiveView flag
 ```
 
 - Add authentication lib
@@ -173,16 +171,24 @@ $ mix phx.new chat_app
 $ mix phx.gen.auth Accounts User users username
 ```
 
-- Create database table, CRUD logic and tests for `Message` structure.
-
-```bash
-$ mix phx.gen.html Accounts Message messages content:text user:references:users
-```
-
 - Create database table, CRUD logic and tests for `Room` structure.
 
 ```bash
-$ mix phx.gen.html Accounts Room rooms name decription
+$ mix phx.gen.live Chats Room rooms name decription owner:references:users
+```
+
+- Create database table, CRUD logic and tests for `Message` structure.
+
+```bash
+$ mix phx.gen.live Chats Message messages content:text user:references:users
+```
+
+
+- Add some style
+
+```html
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css" />
 ```
 </v-clicks>
 
@@ -190,6 +196,7 @@ $ mix phx.gen.html Accounts Room rooms name decription
 layout: center
 ---
 
-## If you want to deploy and go to a vacation just choose Elixir
+## - Elixir is Great for Everything that Runs on Top of a Socket
 
+## - If you want to deploy and go to a vacation just choose Elixir
 ### not node.js 🤦‍♂️
