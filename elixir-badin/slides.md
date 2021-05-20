@@ -19,11 +19,11 @@ Programming language of the future
 
 <div class="flex flex-row w-full">
   <ul class="w-1/2">
+    <li v-click>General purpose</li>
+    <li v-click>Dynamic (strong)</li>
     <li v-click>Functional</li>
     <li v-click>OOP (no classes, but actors 😉 )</li>
-    <li v-click>Dynamic (strong)</li>
-    <li v-click>Concurent</li>
-    <li v-click>General purpose</li>
+    <li v-click>Concurent & parallel</li>
     <li v-click>Immutable</li>
     <li v-click>Distributed</li>
     <li v-click>Fault-tolerant</li>
@@ -86,22 +86,30 @@ background: "./assets/gradient.svg"
 
 ---
 
-# Elixir vs Everybody
+# Cost of concurrency?
 
 <div class="flex pt-20">
-  <img src="assets/erlang_vs_everybody.png" class="w-3/4 m-auto" alt="Elixir versus everybody">
+  <img src="assets/how_expensive_concurrency.png" class="w-3/4 m-auto" alt="Cost of concurrency">
 </div>
+
 ---
 
-# Benchmark
+# HTTP Benchmark
 
 <div class="flex pt-10">
   <img src="assets/phoenix_performance.png" class="w-3/4 m-auto" alt="Elixir versus everybody">
 </div>
 
 ---
+
+# Erlang (by extent Elixir) Ecosystem vs Everybody
+
+<div class="flex pt-20">
+  <img src="assets/erlang_vs_everybody.png" class="w-3/4 m-auto" alt="Elixir versus everybody">
+</div>
+
+---
 layout: center
-background: "./assets/elixir-2bg.png"
 ---
 
 # Data types in Elixir
@@ -121,10 +129,10 @@ background: "./assets/elixir-2bg.png"
   <div>
     <h3> Collection types </h3>
     <ul v-click>
-      <li> Tuples {:ok, 42, "next"} </li>
-      <li> Linked lists (closest to arrays) </li>
+      <li> Tuples -> {:ok, 42, "next"} </li>
+      <li> Linked lists (closest to arrays) -> [1, "Hello", :ok] </li>
       <li> <div class="flex flex-row items-center"> Binaries <uim-angle-double-left /> 1,2 <uim-angle-double-right /> </div> </li>
-      <li> Maps (key-value) </li>
+      <li> Maps (key-value) -> %{"id" => 1, name: "Nikola"} </li>
     </ul>
   </div>
 
@@ -222,101 +230,87 @@ filing =
 layout: center
 ---
 
+## Questions?
+
+### We are almost done
+
+---
+layout: center
+---
+
 # Developing in Elixir
 
 ### Quick prototyping
 
 ---
 
-## Simple chat app
+## Dead simple API
 
 <v-clicks>
 
+- Install Elixir & Phoenix from official website
+
+```html
+elixir-lang.org/install.html
+hexdocs.pm/phoenix/installation.html
+```
+
 - Create simple Elixir project
 
-```bash
-$ mix phx.new chat_app --live # LiveView flag
+```elixir
+# Don't create HTML files and assetes (node_modules)
+mix phx.new simple_api --no-html --no-webpack
 ```
 
-- Add authentication lib
+- Create database table, CRUD logic and tests for `User` structure.
 
 ```elixir
-{:phx_gen_auth, "~> 0.7.0"}
+mix phx.gen.json Accounts User users username:unique age:integer
 ```
 
-- Create user auth logic
+- Create database table, CRUD logic and tests for `Order` structure.
 
-```bash
-$ mix phx.gen.auth Accounts User users # Creates user with e-mail and password
-```
-
-- Create database table, CRUD logic and tests for `Room` structure.
-
-```bash
-$ mix phx.gen.live Chats Room rooms name decription user_id:references:users
-```
-
-- Create database table, CRUD logic and tests for `Message` structure.
-
-```bash
-$ mix phx.gen.context Chats Message messages content:text room_id:references:rooms user_id:references:users
+```elixir
+mix phx.gen.json Bar Order orders total_cost:integer user_id:references:users
 ```
 
 </v-clicks>
 
 ---
-
-## Add some style
-
-```html
-<!-- Add Font Awesome icons -->
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css" />
-
-<!-- Register icon -->
-<i class="fal fa-user-edit"></i>
-<!-- Login icon -->
-<i class="fal fa-sign-in-alt"></i>
-
-<!-- Chats link -->
-<li>
-  <%= link to: Routes.room_index_path(@conn, :index) do %>
-    Chat rooms <i class="fal fa-comment-alt-lines"></i>
-  <% end %>
-</li>
-<!-- Settings icon -->
-<i class="fal fa-user-cog"></i>
-<!-- Logout icon -->
-<i class="fal fa-sign-out"></i>
-```
-
----
-
-## Lets get Room's ready
-
-```elixir
-# Add
-alias ChatApp.Chats.Message
-alias ChatApp.Accounts.User
-
-# Modify
-belongs_to :user, User
-has_many :messages, Message
-```
-
-```elixir
-# Add to Chats context
-def list_room_messages(room_id) do
-  query = from m in Message, where: m.room_id == ^room_id
-  Repo.all(query)
-end
-```
-
----
 layout: center
 ---
 
-## - Elixir is Great for Everything that Runs on Top of a Socket
+## Lets connect User and Order
 
-## - If you want to deploy and go to a vacation just choose Elixir
+```elixir
+# File `/lib/simple/bar/order.ex`
+# Add
+alias SimpleApi.Accounts.User
+# Modify
+belongs_to :user, User
 
-### not node.js 🤦‍♂️
+# Update changeset
+|> _fn_(attrs, [... Add -> :user_id])
+```
+
+---
+layout: center 
+---
+
+## Aaaand That's it
+
+### We have a working API
+
+---
+
+# So, why use Elixir?
+
+<v-clicks>
+
+- If you NEED communication or messaging
+- If you DON'T NEED high number crunching and high FLOPS game
+- Scaling and efficient is easy and efficient, I mean efficient efficient
+- Elixir is Great for Everything that Runs on Top of a Socket
+- If you want to deploy and go to a vacation just choose Elixir (not node.js 🤦‍♂️)
+
+</v-clicks>
