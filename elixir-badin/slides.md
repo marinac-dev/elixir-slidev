@@ -123,9 +123,7 @@ background: "./assets/elixir-2bg.png"
     <ul v-click>
       <li> Tuples {:ok, 42, "next"} </li>
       <li> Linked lists (closest to arrays) </li>
-      <li class="flex flex-row items-center">
-        Binaries <uim-angle-double-left /> 1,2 <uim-angle-double-right />
-      </li>
+      <li> <div class="flex flex-row items-center"> Binaries <uim-angle-double-left /> 1,2 <uim-angle-double-right /> </div> </li>
       <li> Maps (key-value) </li>
     </ul>
   </div>
@@ -138,6 +136,87 @@ background: "./assets/elixir-2bg.png"
     </ul>
   </div>
 </div>
+
+---
+layout: center
+---
+
+# Pattern matching and pipe operator
+
+---
+
+## Pattern matching
+
+- In elixir a = 1 does not mean we are assigning 1 to a variable `a`
+- Equal sign means we are `asserting` that LHS is equal to RHS. (like basic algebra)
+
+<v-clicks>
+
+```elixir
+iex> a = 2 # Not assigning but binding
+2
+iex> 2 = a
+2
+iex> a = 1 # Rebinding
+1
+iex> ^a = 2 # Assert LHS to RHS without rebinding
+** (MatchError) no match of right hand side value: 2
+```
+
+```elixir
+iex> [1, a, 3] = [1, 2, 3]
+[1, 2, 3]
+iex> a
+2
+```
+
+```elixir
+case HTTP.get("www.totally-legit-website.com") do
+  {:ok, response} -> # BUM! Do something with response
+  {:error, reason} -> # Oh no :(
+end
+```
+
+</v-clicks>
+
+---
+
+## Pipe operator
+
+### |>
+
+- Typical code in OOP
+
+```elixir
+people = DB.find_customers()
+orders = Orders.for_customers(people)
+tax    = sales_tax(orders, 2013)
+filing = prepare_filing(tax)
+```
+
+<v-click>
+
+- After rewrite
+
+```elixir
+filing = prepare_filing(sales_tax(Orders.for_customers(DB.find_customers()), 2013))
+```
+
+</v-click>
+
+<v-click>
+
+- But with elixir
+
+```elixir
+filing = 
+  DB.find_customers()
+  |> Orders.for_customers()
+  |> sales_tax(2013)
+  |> prepare_filing()
+```
+
+</v-click>
 
 ---
 layout: center
@@ -168,29 +247,69 @@ $ mix phx.new chat_app --live # LiveView flag
 - Create user auth logic
 
 ```bash
-$ mix phx.gen.auth Accounts User users username
+$ mix phx.gen.auth Accounts User users # Creates user with e-mail and password
 ```
 
 - Create database table, CRUD logic and tests for `Room` structure.
 
 ```bash
-$ mix phx.gen.live Chats Room rooms name decription owner:references:users
+$ mix phx.gen.live Chats Room rooms name decription user_id:references:users
 ```
 
 - Create database table, CRUD logic and tests for `Message` structure.
 
 ```bash
-$ mix phx.gen.live Chats Message messages content:text user:references:users
+$ mix phx.gen.context Chats Message messages content:text room_id:references:rooms user_id:references:users
 ```
 
+</v-clicks>
 
-- Add some style
+---
+
+## Add some style
 
 ```html
-<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+<!-- Add Font Awesome icons -->
 <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css" />
+
+<!-- Register icon -->
+<i class="fal fa-user-edit"></i>
+<!-- Login icon -->
+<i class="fal fa-sign-in-alt"></i>
+
+<!-- Chats link -->
+<li>
+  <%= link to: Routes.room_index_path(@conn, :index) do %>
+    Chat rooms <i class="fal fa-comment-alt-lines"></i>
+  <% end %>
+</li>
+<!-- Settings icon -->
+<i class="fal fa-user-cog"></i>
+<!-- Logout icon -->
+<i class="fal fa-sign-out"></i>
 ```
-</v-clicks>
+
+---
+
+## Lets get Room's ready
+
+```elixir
+# Add
+alias ChatApp.Chats.Message
+alias ChatApp.Accounts.User
+
+# Modify
+belongs_to :user, User
+has_many :messages, Message
+```
+
+```elixir
+# Add to Chats context
+def list_room_messages(room_id) do
+  query = from m in Message, where: m.room_id == ^room_id
+  Repo.all(query)
+end
+```
 
 ---
 layout: center
@@ -199,4 +318,5 @@ layout: center
 ## - Elixir is Great for Everything that Runs on Top of a Socket
 
 ## - If you want to deploy and go to a vacation just choose Elixir
+
 ### not node.js 🤦‍♂️
