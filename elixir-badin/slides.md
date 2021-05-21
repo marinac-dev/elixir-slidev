@@ -10,7 +10,7 @@ info: |
 <h1 class="pl-16 font-sans text-purple-600"> Elixir </h1>
 
 <div class="bg-opacity-40 bg-dark-600 w-86 p-2 rounded text-center">
-Programming language of the future
+The future is functional and concurrent.
 </div>
 
 ---
@@ -41,6 +41,9 @@ Programming language of the future
         WhatsApp - 2 Million connections on one node/server, Facebook (chat backend)
       </li>
       <li>
+        T-Mobile (SMS)
+      </li>
+      <li>
         Motorola Solutions uses Erlang and Elixir for mission-critical communication systems that need to be reliable and fault-tolerant.
       </li>
       <li>
@@ -67,8 +70,8 @@ background: "./assets/gradient.svg"
       <li v-click> Concurrency </li>
       <li v-click> Scalability </li>
       <li v-click> Fault tolerance </li>
-      <li v-click> Phoenix framework </li>
-      <li v-click> OTP (Erlang VM, Mnesia, Actor Model, ETS)</li>
+      <li v-click> Phoenix web framework (MVC) </li>
+      <li v-click> OTP - Open Telecom Platform (Erlang VM, Mnesia, Actor Model, ETS)</li>
     </ul>
     <img v-after src="assets/elixir_process.jpg" alt="Elixir process" class="w-90" v-motion :initial="{ x: -80 }" :enter="{ x: 0 }">
   </div>
@@ -77,18 +80,28 @@ background: "./assets/gradient.svg"
     <h2> Cons </h2>
     <ul>
       <li v-click> Immature ecosystem </li>
-      <li v-click> Weak FLOPS game </li>
       <li v-click> Small community </li>
       <li v-click> Small tallent pool </li>
+      <li v-click> Weak FLOPS game (solution? NIFs) </li>
     </ul>
   </div>
+</div>
+
+---
+layout:center
+---
+
+# Concurrency vs parallelism?
+
+<div class="flex justify-center items-center pb-10">
+  <img src="assets/concurrent_vs_parallel.png" class="w-3/4" alt="Cost of concurrency">
 </div>
 
 ---
 
 # Cost of concurrency?
 
-<div class="flex pt-20">
+<div class="flex pb-5">
   <img src="assets/how_expensive_concurrency.png" class="w-3/4 m-auto" alt="Cost of concurrency">
 </div>
 
@@ -309,8 +322,9 @@ layout: center
 
 - If you NEED communication or messaging
 - If you DON'T NEED high number crunching and high FLOPS game
-- Scaling and efficient is easy and efficient, I mean efficient efficient
+- Scaling and maintaining is easy and efficient, I mean efficient efficient
 - Elixir is Great for Everything that Runs on Top of a Socket
 - If you want to deploy and go to a vacation just choose Elixir (not node.js 🤦‍♂️)
+- Jose Valim 💖
 
 </v-clicks>
